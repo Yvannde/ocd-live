@@ -1,0 +1,44 @@
+---
+description: Système de design (police, couleurs, espacements, composants) à respecter pour tout fichier d'interface
+globs: "**/*.tsx,**/*.css,**/*.mdx"
+alwaysApply: false
+---
+
+# Source de vérité
+Les valeurs viennent de `docs/design-tokens.css` (importé dans `src/app/globals.css`), calibrées sur la capture meetsponsors. Ne jamais écrire de couleur, taille ou rayon en dur : variables CSS ou classes Tailwind mappées (`bg-bg`, `text-ink`, `border-line`, `font-display`, etc.).
+
+# Direction visuelle
+Look plat / brutaliste de la référence : papier `#F6F6F3`, encre `#0E0E0C`, titres display condensés en MAJUSCULES, **coins à 0**, filets 1 px, **aucune ombre**, dual CTA vert/bleu, alternance sections papier ↔ noir franc. On reprend structure et mesures, jamais textes, images, vidéos ni logo de la référence. Voir `docs/reference-capture.md`.
+
+# Polices
+- Display (h1/h2 sections) : `--font-display` = **Big Shoulders Display** weight **800**, via `next/font`.
+- Corps / UI : `--font-sans` = **Geist**.
+- Labels UI, placeholders, footer meta : `--font-mono` = **Geist Mono**.
+- Jamais de `<link>` externe : uniquement `next/font`.
+- Titres display : MAJUSCULES, `--lh-display` ~0.92. Corps : sentence case, poids 400/500/600.
+
+# Couleurs
+- Deux accents structurels : `--mode-a` (#13784A, Live Lomé) et `--mode-b` (#1D4ED8, Live distance). Pas un seul violet/indigo générique.
+- Sur fond sombre : `--dark-mode-a` / `--dark-mode-b`.
+- Pas de dégradés décoratifs.
+
+# Règles de mise en page
+- Conteneur : 1120 px max, marges 24 px (20 px sous 640 px).
+- Espacement en multiples de 4 px.
+- Sections : 96 px desktop / 64 px mobile.
+- Cartes, inputs, boutons : `--radius-*` = **0**. Bordure 1 px `--line` ou encre.
+- Boutons : hauteur 48 px (40 px nav), rectangulaires (pas de pilule).
+- Zones tactiles : 44 px min.
+- Hero : titre display massif + **deux blocs pleine largeur** vert/bleu (modes).
+
+# Mouvement
+- Un seul moment orchestré : apparition du hero (400 ms).
+- Le reste : 150 ms sur action. Respecter `prefers-reduced-motion`.
+
+# Interdits
+- `border-radius` > 0, ombres, dégradés décoratifs, pilules.
+- Copier contenu ou marque de la référence.
+- Icônes hors `lucide-react` (trait 1.75 px).
+
+# Accessibilité
+Contraste AA, focus 2 px `--accent`, libellés sur tous les champs, `alt` sur images, un seul h1 par page.

@@ -1,0 +1,34 @@
+---
+description: Stack technique, structure des dossiers et conventions de code
+alwaysApply: true
+---
+
+# Stack
+Next.js (App Router) + TypeScript strict, Tailwind CSS, shadcn/ui, lucide-react, Supabase (Postgres, Auth, Storage), Zod, react-hook-form, date-fns + date-fns-tz, Resend (emails), qrcode (QR vitrine). Déploiement Vercel.
+
+# Structure
+```
+src/
+  app/
+    (public)/            page.tsx (landing), programme/, recrutement/, v/[slug]/ (vitrine vendeur)
+    reserver/            parcours en étapes
+    admin/               tableau de bord protégé
+    api/                 webhooks et routes serveur
+  components/ui/         composants shadcn
+  components/sections/   sections de la landing
+  components/booking/    composants du parcours
+  config/site.ts         marque, contacts, chiffres, packages par défaut
+  lib/                   supabase, time, pricing, notifications, payments
+  types/
+```
+
+# Conventions
+- Composants serveur par défaut ; `"use client"` seulement si nécessaire (interactivité).
+- Mutations via Server Actions ou routes API, avec validation Zod côté serveur, toujours. Jamais de confiance au client.
+- Les accès base d'écriture passent par le client service-role côté serveur uniquement.
+- Aucun `any`. Types partagés dans `src/types`.
+- Heures : stockage UTC (`timestamptz`), conversion à l'affichage avec le fuseau du client (`Africa/Lome`, `Africa/Douala`, `Europe/Paris`, `Europe/Berlin`, fuseau du navigateur par défaut).
+- Argent : entiers en FCFA, jamais de flottants. Conversion EUR indicative avec le taux fixe 655,957 XOF pour 1 EUR.
+- Chaque page a ses états : chargement (squelette), erreur (message qui dit quoi faire), vide (invitation à agir).
+- Noms de variables et de fonctions en anglais, textes visibles en français dans `src/config/copy.fr.ts`.
+- Pas de dépendance ajoutée sans raison : dis laquelle et pourquoi dans le message de commit.

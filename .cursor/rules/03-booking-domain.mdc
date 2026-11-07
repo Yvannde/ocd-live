@@ -1,0 +1,38 @@
+---
+description: Règles métier de la réservation (modes, packages, créneaux, statuts, paiement, fuseaux)
+globs: "src/lib/**,src/app/reserver/**,src/app/admin/**,src/app/api/**,supabase/**"
+alwaysApply: false
+---
+
+# Modes
+- `onsite` : le vendeur vient au studio de Lomé, une régie dirige son live.
+- `remote` : le vendeur reste chez lui ou en boutique, une assistante basée à Lomé l'accompagne.
+
+# Packages (six, modifiables depuis l'admin)
+Chaque package a : nom, accroche, durée en minutes, nombre de sessions, prix en FCFA, modes autorisés, liste d'avantages, drapeau « mis en avant », ordre d'affichage, actif ou non. Les valeurs de départ sont dans `docs/demo-seed-data.md`. Aucun prix n'est écrit en dur dans le code.
+
+# Créneaux
+- Un seul live à la fois (une seule régie). Deux créneaux actifs ne peuvent jamais se chevaucher : garanti par la contrainte d'exclusion de `supabase/schema.sql`.
+- Les créneaux proposés dépendent de la durée du package et des horaires d'ouverture (table `settings`).
+- Une marge de 15 minutes est ajoutée après chaque live (installation suivante).
+- Un package à plusieurs sessions demande autant de créneaux que de sessions. Démo : le parcours ne fait choisir que la première session, les suivantes sont planifiées avec l'équipe (ajout depuis l'admin). Sélection multiple des dates : phase 2.
+- L'admin peut bloquer des plages (congés, événements) : ce sont des créneaux de type `block`.
+
+# Cycle d'une réservation
+`pending` (créneau retenu 15 minutes pendant le paiement) → `confirmed` (acompte ou paiement reçu) → `completed`.
+Branches : `cancelled`, `expired` (retenue dépassée, créneau libéré automatiquement), `no_show`.
+Un créneau d'une réservation `expired` ou `cancelled` est libéré immédiatement.
+
+# Paiement
+- Acompte par défaut : 30 % (paramètre `deposit_percent`), solde sur place ou avant le live.
+- Interface `PaymentProvider` (`createCheckout`, `verifyWebhook`). Implémentation de démo : `SimulatedProvider` qui confirme après un clic. Les vrais fournisseurs (FedaPay, CinetPay, PayDunya…) se branchent plus tard sans toucher au parcours.
+- Toujours confirmer une réservation à partir du webhook vérifié côté serveur, jamais depuis le navigateur.
+
+# Fuseaux horaires
+Le créneau est stocké en UTC. L'interface affiche l'heure locale du client et rappelle l'heure de Lomé (« 10 h 00 à Lomé »). Test obligatoire : un client à Douala (UTC+1) réservant 10 h 00 heure de Lomé voit 11 h 00.
+
+# Données vendeur collectées
+Nom complet, nom du business, catégorie (alimentation, mode, beauté, tech, services, autre), description des produits (texte + jusqu'à 6 photos), offre ou promotion à annoncer, téléphone WhatsApp, adresse, ville et pays, liens réseaux sociaux, mode choisi. Consentement explicite à l'affichage de la vitrine publique.
+
+# Notifications (événements)
+Réservation créée, paiement confirmé, rappel 24 h avant, rappel 1 h avant, annulation. Canaux : email au client (Resend), Telegram à l'équipe Bovane, lien WhatsApp `wa.me` pré-rempli pour le client.

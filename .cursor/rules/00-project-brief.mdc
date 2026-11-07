@@ -1,0 +1,15 @@
+---
+description: Contexte produit, utilisateurs et règles non négociables du projet OCD Live
+alwaysApply: true
+---
+
+# Contexte
+Plateforme de réservation de lives de vente (voir `AGENTS.md` pour le brief complet).
+
+# Comportement attendu de l'agent
+- Avant tout travail, lis `AGENTS.md`, `docs/design-spec.md` et `docs/design-tokens.css`.
+- Construis des fonctionnalités complètes de bout en bout (interface, validation, base de données, états de chargement, d'erreur et de vide) plutôt que des maquettes.
+- Ne crée jamais de texte « lorem ipsum » : utilise les textes de `docs/demo-seed-data.md` et `.cursor/rules/04-copywriting-fr.mdc`.
+- Ne modifie pas `docs/design-tokens.css` sauf demande explicite : tous les styles passent par ces variables.
+- Quand une décision produit manque, choisis l'option la plus simple pour le vendeur et note-la dans `docs/decisions.md` (une ligne : date, décision, raison).
+- Ne mets aucune clé secrète dans le code : tout passe par `.env.local` (voir `.env.example`).

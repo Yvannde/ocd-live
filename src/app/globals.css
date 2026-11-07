@@ -1,0 +1,204 @@
+@import "tailwindcss";
+@import "../../docs/design-tokens.css";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-muted: var(--bg-muted);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-mode-a: var(--mode-a);
+  --color-mode-b: var(--mode-b);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-surface: var(--dark-surface);
+  --color-dark-text: var(--dark-text);
+  --color-dark-body: var(--dark-body);
+  --color-dark-muted: var(--dark-muted);
+  --color-dark-dim: var(--dark-dim);
+  --color-dark-rule: var(--dark-rule);
+  --color-dark-mode-a: var(--dark-mode-a);
+  --color-dark-mode-b: var(--dark-mode-b);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-slot-free: var(--slot-free);
+  --color-slot-free-strong: var(--slot-free-strong);
+  --color-slot-taken: var(--slot-taken);
+  --color-slot-selected: var(--slot-selected);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* next/font/local injects --font-big-shoulders with the hashed family name */
+  --font-display: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+}
+
+/* Ensure display utility always hits the loaded local face, not the bare name in tokens */
+:root {
+  --font-display: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+}
+
+@layer base {
+  * {
+    border-radius: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter-mobile);
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: var(--gutter);
+    }
+  }
+
+  .font-display {
+    font-family: var(--font-big-shoulders), var(--font-display), "Arial Narrow", sans-serif;
+    font-weight: var(--font-display-weight);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tracking-display);
+    text-transform: uppercase;
+  }
+
+  .section-y {
+    padding-block: var(--section-y-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: var(--section-y);
+    }
+  }
+
+  .text-display {
+    font-size: var(--text-display);
+  }
+
+  .text-h2 {
+    font-size: var(--text-h2);
+    line-height: var(--lh-heading);
+  }
+
+  .text-h3 {
+    font-size: var(--text-h3);
+  }
+
+  .animate-hero {
+    animation: hero-in var(--t-hero) var(--ease) both;
+  }
+
+  .animate-hero-delay-1 {
+    animation-delay: 80ms;
+  }
+
+  .animate-hero-delay-2 {
+    animation-delay: 160ms;
+  }
+
+  /* Vague de remplissage (bas → haut) sur boutons outline */
+  .btn-wave {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: var(--ink);
+    background: transparent;
+    transition: color var(--t-fast) var(--ease);
+  }
+
+  .btn-wave::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 320ms var(--ease);
+  }
+
+  .btn-wave-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-wave:hover,
+  .btn-wave:focus-visible {
+    color: var(--bg);
+  }
+
+  .btn-wave:hover::before,
+  .btn-wave:focus-visible::before {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero,
+  .animate-hero-delay-1,
+  .animate-hero-delay-2 {
+    animation: none;
+  }
+
+  .btn-wave::before {
+    transition: none;
+  }
+
+  .btn-wave:hover,
+  .btn-wave:focus-visible {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .btn-wave:hover::before,
+  .btn-wave:focus-visible::before {
+    transform: none;
+  }
+}

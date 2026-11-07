@@ -1,0 +1,99 @@
+/* =====================================================================
+   TOKENS DE DESIGN — calibrés sur meetsponsors.com (capture docs/).
+   Structure et mesures uniquement : ne jamais copier textes, images,
+   logo ou nom de la référence.
+   Source mesurée le 2026-11-07 via CSS live (--ms2-*).
+   ===================================================================== */
+:root {
+  /* Couleurs — papier / encre */
+  --bg: #F6F6F3;              /* --ms2-paper */
+  --bg-muted: #F6F6F3;        /* même papier ; sections « muted » via --dark-* */
+  --ink: #0E0E0C;             /* --ms2-ink / --ms2-text */
+  --ink-2: #2E2E2A;           /* --ms2-text-2 */
+  --ink-muted: #45453F;       /* --ms2-text-muted */
+  --line: #D4D3CD;            /* --ms2-rule-soft */
+  --line-strong: #A9A8A1;     /* --ms2-rule-control */
+
+  /* Dual CTA (réf. talent=vert / marque=bleu → chez nous : Lomé / distance) */
+  --mode-a: #13784A;          /* --ms2-talent  → Live à Lomé */
+  --mode-b: #1D4ED8;          /* --ms2-brand   → Live à distance */
+  --accent: var(--mode-b);    /* lien / focus par défaut */
+  --accent-ink: #ffffff;
+
+  /* Sections sombres (alternance haute densité) */
+  --dark-bg: #0E0E0C;
+  --dark-surface: #26261F;
+  --dark-text: #F2F0EA;
+  --dark-body: #CFCCC4;
+  --dark-muted: #A8A59D;
+  --dark-dim: #8C8981;
+  --dark-rule: #3A3935;
+  --dark-mode-a: #4CC88A;     /* vert sur fond sombre */
+  --dark-mode-b: #86A6FF;     /* bleu sur fond sombre */
+
+  --success: #13784A;
+  --warning: #d98a00;
+  --danger: #d92d20;
+
+  /* Calendrier de réservation */
+  --slot-free: #E8A0B0;           /* rose soft — créneau disponible */
+  --slot-free-strong: #D47890;    /* hover / accent libre */
+  --slot-taken: #B8B6AF;          /* pris / bloqué */
+  --slot-selected: #0E0E0C;       /* sélection */
+
+  /* Polices — exactes référence */
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif; /* weight 800 */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Échelle typographique
+     Display = titres MAJUSCULES condensés (Big Shoulders 800).
+     Corps = Geist. Petits labels UI / placeholders = Geist Mono. */
+  --text-display: clamp(2.75rem, 8vw, 6.5rem); /* hero massif, ~44 → 104 px */
+  --text-h2: clamp(2.25rem, 5.5vw, 4.5rem);   /* sections ~36 → 72 px */
+  --text-h3: clamp(1.75rem, 3vw, 2.75rem);    /* sous-blocs */
+  --text-card-title: 1.5rem;
+  --text-lead: 1.125rem;                      /* ~18 px */
+  --text-body: 1rem;                          /* 16 px */
+  --text-small: 0.875rem;                     /* 14 px */
+  --lh-display: 0.92;                         /* très serré, condensé */
+  --lh-heading: 0.95;
+  --lh-body: 1.5;
+  --tracking-display: -0.01em;
+  --tracking-heading: 0;
+  --font-display-weight: 800;
+
+  /* Mise en page */
+  --container: 1120px;
+  --gutter: 24px;
+  --gutter-mobile: 20px;
+  --section-y: 96px;
+  --section-y-mobile: 64px;
+  --nav-h: 64px;
+
+  /* Rayons — la référence force border-radius: 0 (pas de pilules, pas de cartes rondes) */
+  --radius-card: 0px;
+  --radius-input: 0px;
+  --radius-pill: 0px;
+  --border: 1px;
+  --border-strong: 2px;
+
+  /* Contrôles */
+  --btn-h: 48px;
+  --btn-h-sm: 40px;
+  --input-h: 48px;
+  --tap-min: 44px;
+
+  /* Ombres — quasi absentes sur la référence (look plat / brutaliste) */
+  --shadow-hover: none;
+  --shadow-float: none;
+
+  /* Mouvement */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-fast: 150ms;
+  --t-hero: 400ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-fast: 0ms; --t-hero: 0ms; }
+}

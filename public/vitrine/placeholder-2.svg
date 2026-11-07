@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" role="img" aria-label="Photo produit">
+  <rect width="640" height="480" fill="#E8E4DE"/>
+  <rect x="1" y="1" width="638" height="478" fill="none" stroke="#D9D4CC"/>
+  <text x="320" y="240" text-anchor="middle" font-family="ui-monospace,monospace" font-size="18" fill="#6B6560">Galerie</text>
+</svg>

@@ -1,0 +1,21 @@
+---
+description: Critères de qualité à vérifier avant de dire qu'une tâche est terminée
+alwaysApply: true
+---
+
+Avant de déclarer une tâche terminée, vérifie et corrige :
+
+1. `npm run build` et `npm run lint` passent sans erreur ni avertissement bloquant.
+2. L'écran est utilisable à 360, 768, 1280 et 1536 px, sans défilement horizontal.
+3. Aucun style en dur (couleur, taille, rayon) hors des tokens.
+4. Les états chargement, erreur et vide existent et sont rédigés.
+5. Les formulaires ont : libellés, validation côté serveur (Zod), messages d'erreur utiles, bouton désactivé pendant l'envoi.
+6. Tous les textes sont en français correct, sans lorem ipsum, sans accent manquant.
+7. Navigation au clavier possible, focus visible, contraste AA.
+8. Aucune clé secrète dans le dépôt. `.env.example` à jour.
+9. Les créneaux ne peuvent pas être réservés deux fois (test : deux réservations simultanées du même créneau, une seule passe).
+10. Le fuseau horaire est correct (test Douala vs Lomé).
+11. Performance mobile : LCP sous 2,5 s sur la landing, images optimisées avec `next/image`, vidéo chargée à la demande.
+12. Métadonnées : titre, description, image de partage (OG), favicon, `robots.txt`, `sitemap.xml`.
+
+Termine chaque tâche par un court bilan : ce qui est fait, ce qui reste, les décisions prises.

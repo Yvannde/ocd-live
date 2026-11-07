@@ -1,0 +1,25 @@
+---
+description: Ton et règles de rédaction des textes visibles en français
+globs: "src/**/*.tsx,src/config/**"
+alwaysApply: false
+---
+
+# Principes
+- Tutoiement, phrases courtes, verbes d'action, majuscule seulement en début de phrase.
+- Dire ce que l'utilisateur obtient, pas comment le système fonctionne.
+- Un bouton dit exactement ce qui se passe : « Réserver mon créneau », « Confirmer et payer l'acompte », « Envoyer ma candidature ». Jamais « Valider » ni « Soumettre ».
+- Une action garde le même nom partout (le bouton « Réserver » produit un message « Réservation enregistrée »).
+- Les erreurs disent ce qui s'est passé et comment réparer, sans excuse ni jargon : « Ce créneau vient d'être pris. Choisis un autre horaire. »
+- Un écran vide invite à agir : « Aucun live prévu cette semaine. Réserve le premier créneau. »
+- Prix : `15 000 FCFA` (espace insécable comme séparateur de milliers). Heures : `10 h 00`. Dates : `mardi 1er décembre`.
+- Pas de promesses chiffrées sur l'audience : les chiffres viennent de `src/config/site.ts`.
+
+# Textes de la page d'accueil (point de départ, à affiner)
+- Titre : « Vends en live sur House of Challenge. »
+- Sous-titre : « Réserve ton créneau, présente ton produit, fais-toi contacter. À Lomé ou depuis chez toi. »
+- Carte 1 : « Live à Lomé » — « Tu viens au studio. Une régie dirige ton live pendant que tu vends. »
+- Carte 2 : « Live à distance » — « Tu restes chez toi ou dans ta boutique. Une assistante t'accompagne depuis Lomé. »
+- Bloc 1 : « Place ton produit devant la bonne audience. » — « Ton numéro, ton adresse, ton offre : tout est annoncé en direct. »
+- Bloc 2 : « Ta vitrine reste en ligne après le live. » — « Chaque vendeur reçoit sa page avec ses produits, son téléphone et un QR code. »
+- Bloc 3 : « Du créneau au paiement en deux minutes. » — « Choisis ton package, ton horaire, paye l'acompte. C'est confirmé. »
+- Recrutement : « On recrute une assistante à Lomé. » — « Pas besoin de diplôme. Il faut savoir parler, convaincre et vendre. »
