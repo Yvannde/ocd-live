@@ -3,7 +3,7 @@
 import type { DemoPackage } from "@/config/site";
 import { copy } from "@/config/copy.fr";
 import type { HourRange } from "@/lib/availability";
-import { weekLabel } from "@/lib/time";
+import { addDays, formatLomeDateShort, weekLabel } from "@/lib/time";
 import {
   FilterField,
   FilterPanel,
@@ -11,6 +11,9 @@ import {
   FilterToggleGroup,
 } from "@/components/ui/FilterPanel";
 import { BookingLegend } from "./BookingLegend";
+import { cn } from "@/lib/utils";
+
+const DAY_SHORT = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
 export function BookingFilters({
   mode,
@@ -46,8 +49,57 @@ export function BookingFilters({
   const f = copy.booking.filters;
 
   return (
-    <div className="sticky top-16 z-30 space-y-4 bg-bg/90 py-4 backdrop-blur-xl">
-      <FilterPanel title="Filtres du calendrier">
+    <div className="sticky top-16 z-30 space-y-3 bg-bg/95 py-3 backdrop-blur-xl">
+      {/* Jour — chips mobiles */}
+      <div className="md:hidden">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={onPrevWeek}
+            aria-label={f.prevWeek}
+            className="h-9 w-9 border border-line text-ink-muted hover:border-ink hover:text-ink"
+          >
+            ←
+          </button>
+          <p className="font-mono text-[12px] text-ink-muted">
+            {weekLabel(weekStart)}
+          </p>
+          <button
+            type="button"
+            onClick={onNextWeek}
+            aria-label={f.nextWeek}
+            className="h-9 w-9 border border-line text-ink-muted hover:border-ink hover:text-ink"
+          >
+            →
+          </button>
+        </div>
+        <div className="flex gap-1 overflow-x-auto pb-1">
+          {DAY_SHORT.map((label, i) => {
+            const day = addDays(weekStart, i);
+            const active = mobileDayIndex === i;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => onMobileDay(i)}
+                className={cn(
+                  "flex min-w-[3.25rem] shrink-0 flex-col items-center border px-2 py-2",
+                  active
+                    ? "border-ink bg-ink text-bg"
+                    : "border-line bg-bg text-ink-muted",
+                )}
+              >
+                <span className="font-mono text-[10px] uppercase">{label}</span>
+                <span className="text-[13px] font-medium tabular-nums">
+                  {day.getUTCDate()}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <FilterPanel title="Filtres">
         <FilterField label={f.mode}>
           <FilterToggleGroup
             value={mode}
@@ -60,22 +112,16 @@ export function BookingFilters({
         </FilterField>
 
         <FilterField label={f.package}>
-          <FilterSelect
-            value={packageSlug}
-            onChange={onPackage}
-          >
+          <FilterSelect value={packageSlug} onChange={onPackage}>
             {packages.map((p) => (
               <option key={p.slug} value={p.slug}>
-                {p.name} — {Math.round(p.durationMinutes / 60)} h
-                {p.durationMinutes % 60
-                  ? String(p.durationMinutes % 60).padStart(2, "0")
-                  : ""}
+                {p.name}
               </option>
             ))}
           </FilterSelect>
         </FilterField>
 
-        <FilterField label={f.week}>
+        <FilterField label={f.week} className="hidden md:flex">
           <div className="flex h-11 items-stretch border border-line">
             <button
               type="button"
@@ -105,45 +151,34 @@ export function BookingFilters({
             onChange={(v) => onHourRange(v as HourRange)}
           >
             <option value="all">{f.allHours}</option>
-            <option value="morning">Matin (9–12 h)</option>
-            <option value="afternoon">Après-midi (12–17 h)</option>
-            <option value="evening">Soir (17–20 h)</option>
+            <option value="morning">Matin</option>
+            <option value="afternoon">Après-midi</option>
+            <option value="evening">Soir</option>
           </FilterSelect>
         </FilterField>
 
-        <FilterField label="Affichage" className="lg:col-span-2">
+        <FilterField label="Affichage" className="md:col-span-2 lg:col-span-1">
           <FilterToggleGroup
             value={freeOnly ? "free" : "all"}
             onChange={(v) => onFreeOnly(v === "free")}
             options={[
-              { value: "all", label: "Tous les créneaux" },
+              { value: "all", label: "Tous" },
               { value: "free", label: f.freeOnly },
             ]}
           />
         </FilterField>
-
-        <FilterField label="Jour (mobile)" className="md:hidden lg:col-span-2">
-          <FilterSelect
-            value={String(mobileDayIndex)}
-            onChange={(v) => onMobileDay(Number(v))}
-          >
-            {["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"].map(
-              (label, i) => (
-                <option key={label} value={i}>
-                  {label}
-                </option>
-              ),
-            )}
-          </FilterSelect>
-        </FilterField>
       </FilterPanel>
 
-      <div className="border border-line bg-bg px-4 py-3 md:px-5">
+      <div className="hidden border border-line bg-bg px-4 py-3 md:block md:px-5">
         <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.06em] text-ink-muted">
           Légende
         </p>
         <BookingLegend />
       </div>
+
+      <p className="font-mono text-[11px] text-ink-muted md:hidden">
+        Jour sélectionné · {formatLomeDateShort(addDays(weekStart, mobileDayIndex))}
+      </p>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
   type CalendarSlot,
   type HourRange,
 } from "@/lib/availability";
-import { addDays, startOfWeek } from "@/lib/time";
+import { addDays, formatLomeTime, startOfWeek } from "@/lib/time";
 import { cn, formatFcfa } from "@/lib/utils";
 import { BookingFilters } from "./BookingFilters";
 import { BookingHeader } from "./BookingHeader";
@@ -215,7 +215,7 @@ export function BookingFlow() {
             onMobileDay={setMobileDayIndex}
           />
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.9fr)]">
+          <div className="mt-4 grid gap-6 pb-28 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.9fr)] lg:pb-0">
             <div>
               <div className="hidden md:block">
                 <WeekCalendar
@@ -240,12 +240,38 @@ export function BookingFlow() {
                 </p>
               ) : null}
             </div>
-            <BookingSummary
-              mode={mode}
-              pkg={pkg}
-              slot={selectedSlot}
-              onContinue={() => setStep("business")}
-            />
+            <div className="hidden md:block">
+              <BookingSummary
+                mode={mode}
+                pkg={pkg}
+                slot={selectedSlot}
+                onContinue={() => setStep("business")}
+              />
+            </div>
+          </div>
+
+          {/* Récap sticky bas — mobile */}
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg p-3 md:hidden">
+            <div className="flex items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-medium text-ink">
+                  {pkg.name} · {mode === "onsite" ? "Lomé" : "Distance"}
+                </p>
+                <p className="truncate font-mono text-[11px] text-ink-muted">
+                  {selectedSlot
+                    ? `${formatLomeTime(selectedSlot.start)} à Lomé`
+                    : copy.booking.summary.pickSlot}
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={!selectedSlot}
+                onClick={() => setStep("business")}
+                className="h-11 shrink-0 bg-ink px-4 text-[13px] font-medium text-bg disabled:opacity-40"
+              >
+                {copy.booking.summary.continue}
+              </button>
+            </div>
           </div>
         </div>
       ) : null}

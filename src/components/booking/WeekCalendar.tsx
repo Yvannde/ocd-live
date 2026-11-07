@@ -25,6 +25,90 @@ function heightForDuration(startIso: string, endIso: string): number {
   return Math.max((mins / 60) * HOUR_PX, 22);
 }
 
+function MobileSlotList({
+  weekStart,
+  daySlots,
+  dayIndex,
+  selectedId,
+  onSelect,
+}: {
+  weekStart: Date;
+  daySlots: CalendarSlot[];
+  dayIndex: number;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}) {
+  const day = addDays(weekStart, dayIndex);
+
+  return (
+    <div className="border border-line bg-bg">
+      <div className="border-b border-line px-4 py-3">
+        <p className="font-mono text-[12px] capitalize text-ink-muted">
+          {formatLomeDateShort(day)}
+        </p>
+        <p className="mt-1 text-[15px] font-medium text-ink">
+          {(() => {
+            const n = daySlots.filter((s) => s.status === "free").length;
+            return n > 1
+              ? `${n} créneaux libres`
+              : `${n} créneau libre`;
+          })()}
+        </p>
+      </div>
+      <ul className="divide-y divide-line">
+        {daySlots.length === 0 ? (
+          <li className="px-4 py-6 text-[14px] text-ink-muted">
+            Aucun créneau sur cette plage.
+          </li>
+        ) : (
+          daySlots.map((slot) => {
+            const selected = selectedId === slot.id;
+            const free = slot.status === "free";
+            const blocked = slot.status === "blocked";
+            return (
+              <li key={slot.id}>
+                <button
+                  type="button"
+                  disabled={!free}
+                  onClick={() => free && onSelect(slot.id)}
+                  aria-pressed={selected}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left transition-colors duration-150",
+                    free &&
+                      !selected &&
+                      "bg-slot-free hover:bg-slot-free-strong hover:text-bg",
+                    selected && "bg-slot-selected text-bg",
+                    slot.status === "taken" &&
+                      "cursor-not-allowed bg-slot-taken/70 text-ink-muted",
+                    blocked && "cursor-not-allowed text-ink-muted opacity-70",
+                  )}
+                >
+                  <span className="font-mono text-[15px] tabular-nums">
+                    {formatLomeTime(slot.start)}
+                    <span className="text-ink-muted/80">
+                      {" "}
+                      – {formatLomeTime(slot.end)}
+                    </span>
+                  </span>
+                  <span className="font-mono text-[11px] uppercase tracking-wide">
+                    {selected
+                      ? "Choisi"
+                      : free
+                        ? "Libre"
+                        : blocked
+                          ? "Bloqué"
+                          : "Pris"}
+                  </span>
+                </button>
+              </li>
+            );
+          })
+        )}
+      </ul>
+    </div>
+  );
+}
+
 export function WeekCalendar({
   weekStart,
   days,
@@ -36,14 +120,24 @@ export function WeekCalendar({
   days: CalendarSlot[][];
   selectedId: string | null;
   onSelect: (id: string) => void;
-  /** If set, only show that day (mobile). */
+  /** If set, only show that day as a compact list (mobile). */
   mobileDayIndex?: number;
 }) {
+  if (mobileDayIndex !== undefined) {
+    const daySlots = days[mobileDayIndex] ?? [];
+    return (
+      <MobileSlotList
+        weekStart={weekStart}
+        daySlots={daySlots}
+        dayIndex={mobileDayIndex}
+        selectedId={selectedId}
+        onSelect={onSelect}
+      />
+    );
+  }
+
   const hours = hourRows();
-  const visibleDays =
-    mobileDayIndex !== undefined
-      ? [[days[mobileDayIndex], mobileDayIndex] as const]
-      : days.map((d, i) => [d, i] as const);
+  const visibleDays = days.map((d, i) => [d, i] as const);
 
   return (
     <div className="w-full">
@@ -138,13 +232,14 @@ export function WeekCalendar({
                 );
               })}
 
-              {/* half-hour guides */}
               {hours.map((h) => (
                 <div
                   key={`half-${h}`}
                   className="pointer-events-none absolute inset-x-0 border-b border-dashed border-line/30"
                   style={{
-                    top: (h - OPEN_HOUR) * HOUR_PX + (SLOT_STEP_MINUTES / 60) * HOUR_PX,
+                    top:
+                      (h - OPEN_HOUR) * HOUR_PX +
+                      (SLOT_STEP_MINUTES / 60) * HOUR_PX,
                   }}
                 />
               ))}
