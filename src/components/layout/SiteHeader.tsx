@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconClose, IconMenu } from "@/components/icons";
 import { brand } from "@/config/site";
 import { copy } from "@/config/copy.fr";
@@ -17,8 +17,23 @@ const links = [
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-50 h-16 border-b border-line/60 bg-bg/70 backdrop-blur-xl">
+    <header
+      className={cn(
+        "sticky top-0 z-50 h-16 border-b border-line/60 backdrop-blur-xl",
+        open ? "bg-bg" : "bg-bg/70",
+      )}
+      style={open ? { backgroundColor: "var(--bg)" } : undefined}
+    >
       <div className="container-page flex h-full items-center justify-between gap-4">
         <Link
           href="/"
@@ -62,26 +77,26 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div
-        id="mobile-menu"
-        className={cn(
-          "fixed inset-0 top-16 z-40 bg-bg/95 backdrop-blur-xl md:hidden",
-          open ? "block" : "hidden",
-        )}
-      >
-        <nav className="flex flex-col px-5 py-6" aria-label="Mobile">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="flex min-h-14 items-center border-b border-line/60 text-[20px] font-medium text-ink-2 transition-colors duration-150 hover:text-ink"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      </div>
+      {open ? (
+        <div
+          id="mobile-menu"
+          className="fixed inset-x-0 bottom-0 top-16 z-[60] overflow-y-auto bg-bg md:hidden"
+          style={{ backgroundColor: "var(--bg)" }}
+        >
+          <nav className="flex min-h-full flex-col px-5 py-6" aria-label="Mobile">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="flex min-h-14 items-center border-b border-line text-[20px] font-medium text-ink transition-colors duration-150 hover:text-ink-muted"
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
